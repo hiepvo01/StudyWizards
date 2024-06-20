@@ -1,0 +1,9 @@
+.DS_Store
+*.xcuserdatad/
+SamplePDF/
+/Backend/.env
+/Backend/.venv/
+/Backend/chroma_db/
+.vercel
+./Backend/StudyWizards
+.env
