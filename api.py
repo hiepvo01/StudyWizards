@@ -7,17 +7,18 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-app = Flask(__name__)
+app = Flask(__name__)  # Ensure this line exists
 
 # Load environment variables
 load_dotenv()
 
 # Define constants
 CHROMA_DB_DIR = "./chroma_db"  # Directory to store Chroma database
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 def get_db_connection(collection_name):
     """Returns a Chroma DB connection object"""
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
     return Chroma(collection_name=collection_name, persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
 
 def get_similar_docs(query: str, collection_name: str):
@@ -27,9 +28,7 @@ def get_similar_docs(query: str, collection_name: str):
 
 def fetch_answer_from_llm(query: str, collection_name: str):
     """Fetches relevant answer from LLM"""
-    llm = ChatOpenAI(model_name="gpt-3.5-turbo",
-                     temperature=0.6,
-                     max_tokens=1024)
+    llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.6, max_tokens=1024, api_key=OPENAI_API_KEY)
     chain = load_qa_chain(llm, "stuff")
     similar_docs = get_similar_docs(query, collection_name)
     docs = [doc for doc in similar_docs]
@@ -50,7 +49,7 @@ def split_docs(documents):
 
 def file_exists_in_db(collection_name):
     """Checks if a file already exists in the Chroma database"""
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
     vector_db = Chroma(collection_name=collection_name, persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
     results = vector_db.similarity_search("dummy query", k=1)
     return len(results) > 0
@@ -65,7 +64,7 @@ def insert_data(file_path):
     try:
         documents = load_docs(file_path)
         docs = split_docs(documents)
-        embeddings = OpenAIEmbeddings()
+        embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
         for doc in docs:
             doc.metadata["collection"] = collection_name
         vectorstore = Chroma.from_documents(collection_name=collection_name, documents=docs, embedding=embeddings, persist_directory=CHROMA_DB_DIR)
@@ -76,7 +75,7 @@ def insert_data(file_path):
 
 def delete_data(collection_name):
     """Deletes embeddings for a document from Chroma DB and removes the file"""
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
     vector_db = Chroma(collection_name=collection_name, persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
     vector_db.delete_collection()
 

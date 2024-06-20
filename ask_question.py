@@ -1,7 +1,7 @@
 import requests
 
 def ask_question(question, file_name):
-    url = "http://127.0.0.1:5000/ask_question"
+    url = "https://studywizards.onrender.com/ask_question"
     headers = {'Content-Type': 'application/json'}
     data = {
         "question": question,
