@@ -21,7 +21,7 @@ PDF_DIR = "./pdf_documents"  # Directory to store PDF documents
 def get_db_connection(collection_name):
     """Returns a Chroma DB connection object"""
     embeddings = OpenAIEmbeddings()
-    return Chroma(collection_name=collection_name, persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
+    return Chroma(collection_name=collection_name, embedding_function=embeddings)
 
 def get_similar_docs(query: str, collection_name: str):
     """Fetches similar text from the vector db"""
@@ -63,7 +63,7 @@ def extract_content(uploaded_file):
 def file_exists_in_db(collection_name):
     """Checks if a file already exists in the Chroma database"""
     embeddings = OpenAIEmbeddings()
-    vector_db = Chroma(collection_name=collection_name, persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
+    vector_db = Chroma(collection_name=collection_name, embedding_function=embeddings)
     results = vector_db.similarity_search("dummy query", k=1)
     return len(results) > 0
 
