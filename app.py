@@ -138,8 +138,8 @@ def get_response(user_input, collection_name, selected_file):
     return response['answer']
 
 def main():
-    st.set_page_config(page_title="PDF Chatbot", page_icon="🤖")
-    st.title("PDF Chatbot")
+    st.set_page_config(page_title="StudyWizards Chatbot", page_icon="🤖")
+    st.title("StudyWizards Chatbot")
 
     # Initialize session state
     if "chat_history" not in st.session_state:
@@ -151,7 +151,7 @@ def main():
     process_existing_pdfs()
 
     with st.sidebar:
-        st.header("Add PDF for Questioning")
+        st.header("Add Textbook PDF for Questioning")
         uploaded_pdf_file = st.file_uploader("Upload a PDF", type="pdf")
 
         if uploaded_pdf_file is not None:
