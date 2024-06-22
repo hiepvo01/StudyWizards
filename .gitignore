@@ -1,9 +1,5 @@
 .DS_Store
-*.xcuserdatad/
-SamplePDF/
-/Backend/.env
-/Backend/.venv/
-/Backend/chroma_db/
+chroma_db/
 .vercel
-./Backend/StudyWizards
 .env
+*__pycache__
